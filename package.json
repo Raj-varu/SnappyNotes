@@ -1,0 +1,88 @@
+{
+  "name": "snappynotes",
+  "version": "1.0.0",
+  "description": "Zendesk-compatible snippet manager for support agents with offline local JSON storage and fuzzy search",
+  "main": "electron/main.js",
+  "author": "SnappyNotes Team",
+  "license": "MIT",
+  "scripts": {
+    "dev": "concurrently -k \"cross-env BROWSER=none vite\" \"wait-on tcp:5173 && electron .\"",
+    "build:renderer": "vite build",
+    "organize:release": "node scripts/organize-release.js",
+    "build": "vite build && electron-builder --win nsis portable && node scripts/organize-release.js",
+    "package": "vite build && electron-builder --win nsis portable && node scripts/organize-release.js",
+    "package:portable": "vite build && electron-builder --win portable && node scripts/organize-release.js",
+    "package:installer": "vite build && electron-builder --win nsis && node scripts/organize-release.js",
+    "start": "electron ."
+  },
+  "dependencies": {
+    "@tiptap/extension-link": "^2.11.5",
+    "@tiptap/extension-placeholder": "^2.11.5",
+    "@tiptap/extension-table": "^2.11.5",
+    "@tiptap/extension-table-cell": "^2.11.5",
+    "@tiptap/extension-table-header": "^2.11.5",
+    "@tiptap/extension-table-row": "^2.11.5",
+    "@tiptap/extension-underline": "^2.11.5",
+    "@tiptap/react": "^2.11.5",
+    "@tiptap/starter-kit": "^2.11.5",
+    "fuse.js": "^7.1.0",
+    "lucide-react": "^1.16.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.4",
+    "autoprefixer": "^10.4.20",
+    "concurrently": "^9.1.2",
+    "cross-env": "^7.0.3",
+    "electron": "^34.2.0",
+    "electron-builder": "^25.1.8",
+    "postcss": "^8.5.1",
+    "tailwindcss": "^3.4.17",
+    "vite": "^6.1.0",
+    "wait-on": "^8.0.2"
+  },
+  "build": {
+    "appId": "com.snappynotes.app",
+    "productName": "SnappyNotes",
+    "directories": {
+      "output": "dist-electron",
+      "buildResources": "build"
+    },
+    "files": [
+      "dist/**/*",
+      "electron/**/*",
+      "build/**/*",
+      "public/**/*",
+      "package.json"
+    ],
+    "win": {
+      "icon": "build/icon.ico",
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "portable",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "SnappyNotes",
+      "artifactName": "${productName}-Setup-${version}.${ext}"
+    },
+    "portable": {
+      "artifactName": "${productName}-Portable-${version}.${ext}"
+    }
+  }
+}
